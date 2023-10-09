@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  user_id                     String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  username                    String     @unique @db.VarChar(255)
+  password                    String     @db.VarChar(255)
+  first_name                  String?    @db.VarChar(255)
+  last_name                   String?    @db.VarChar(255)
+  country                     String?    @db.VarChar(255)
+  city                        String?    @db.VarChar(255)
+  postal_code                 String?    @db.VarChar(255)
+  phone_number                String?    @db.VarChar(255)
+  email                       String?    @unique @db.VarChar(255)
+  secondary_phone_number      String?    @db.VarChar(255)
+  secondary_email             String?    @unique @db.VarChar(255)
+  profile_picture             String?    @db.VarChar(255)
+  document_type               document_t
+  document_url                String     @db.VarChar(255)
+  reset_password_token        String?    @db.VarChar(255)
+  reset_password_token_expiry DateTime?  @db.Date
+  tokens                      Json[]     @default([])
+  registration_date           DateTime?  @default(now()) @db.Timestamp(6)
+  last_login                  DateTime?  @default(now()) @db.Timestamp(6)
+  last_modified               DateTime?  @default(now()) @db.Timestamp(6)
+}
+
+enum document_t {
+  national_id
+  passport
+}
